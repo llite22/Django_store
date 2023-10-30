@@ -1,0 +1,13 @@
+body {
+    background-color: whitesmoke;
+}
+
+.cursor-pointer:hover {
+    cursor: pointer;
+    color: orange;
+}
+
+.color_white {
+    color: white
+}
+
