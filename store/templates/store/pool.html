@@ -2,27 +2,80 @@
 {% load static %}
 {% block content %}
     {% if form %}
-        <form method="post">
+        <form method="post" class="d-flex justify-content-center mt-5 mb-5">
             {% csrf_token %}
-            <div class="form-group">
-                <label>{{ form.name.label }}</label>
-                {{ form.name }}
+            <div class="border w-75 bg-warning border rounded-2 border-3">
+                <div class="d-flex justify-content-center mt-5">
+                    <label>{{ form.name.label }}</label>
+                    <div class="ms-2">{{ form.name }}</div>
+                    <label class="ms-5">{{ form.email.label }}</label>
+                    <div class="ms-2">{{ form.email }}</div>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <div class="mt-2">
+                        <label>{{ form.age.label }}</label>
+                        <div class="d-flex justify-content-center">{{ form.age }}</div>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <div class="mt-2">
+                        <label>{{ form.rate_site.label }}</label>
+                        <div class="d-flex justify-content-center">{{ form.rate_site }}</div>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <div class="mt-2">
+                        <label>{{ form.rate_design.label }}</label>
+                        {{ form.rate_design }}
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <div class="mt-2">
+                        <label>{{ form.rate_features.label }}</label>
+                        <div class="d-flex justify-content-center">{{ form.rate_features }}</div>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center mt-2">
+                    <label>{{ form.sites.label }}</label>
+                    <div class="ms-2">{{ form.sites }}</div>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <div class="mt-2">
+                        <label class="d-flex justify-content-center">{{ form.feedback.label }}</label>
+                        <div>{{ form.feedback }}</div>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center mt-2 mb-5">
+                    <input type="submit" value="Отправить" class="btn btn-success">
+                </div>
             </div>
-            <div class="form-group">
-                <label>{{ form.email.label }}</label>
-                {{ form.email }}
-            </div>
-            <input type="submit" value="Отправить">
         </form>
     {% else %}
-        <p>Спасибо за ваш отзыв!</p>
+        <div class="text-center mt-5">
+            <p class="text-primary">Спасибо, <span class="text-warning">{{ data.name }}</span> за ваш отзыв!</p>
+            <p class="text-primary">Вы сообщили о себе следующее:</p>
+            <p class="text-primary">Ваш возраст: <span class="text-warning">{{ data.age }}</span></p>
+            <p class="text-primary">Ваша оценка сайта: <span class="text-warning">{{ data.rate_site }}</span></p>
+            <p class="text-primary">Ваша оценка дизайна: <span class="text-warning">{{ data.rate_design }}</span></p>
+            <p class="text-primary">Возможности сайта, которые вам понравились:
+                <span class="text-warning">
+                {% for feature in data.rate_features %}
+                    {% if feature == '1' %}Новости{% endif %}
+                    {% if feature == '2' %}Каталог{% endif %}
+                    {% if feature == '3' %}Чат{% endif %}
+                {% endfor %}
+            </span>
+            </p>
 
-        <ul>
-            {% for key, value in data.items %}
-                <li>{{ key }}: {{ value }}</li>
-            {% endfor %}
-        </ul>
-
+            <p class="text-primary">По сравнению с другими сайтами вы оценили наш сайт как:
+                <span class="text-warning">
+                {% if data.sites == '1' %}Лучше других{% endif %}
+                    {% if data.sites == '2' %}Как большинство{% endif %}
+                    {% if data.sites == '3' %}Хуже других{% endif %}
+                    </span>
+            </p>
+            <p class="text-primary">Ваш отзыв:</p>
+            <p class="text-primary"><span class="text-warning">{{ data.feedback }}</span></p>
+        </div>
     {% endif %}
-
 {% endblock %}

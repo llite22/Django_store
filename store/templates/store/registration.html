@@ -1,0 +1,16 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+    <div>
+        <h2>Регистрация</h2>
+        <div class="col-md-6">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <div>{{ regform.as_p }}</div>
+                    <button type="submit" class="btn btn-dark">Зарегистрироваться</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

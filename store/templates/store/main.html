@@ -37,14 +37,29 @@
                             <img src="{% static 'images/cart.svg' %}" alt="cart" width="20" height="20">
                         </a>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link active" aria-current="page" href={% url 'login' %}>
-                            <img src="{% static 'images/login.svg' %}" alt="login" width="20" height="20">
-                        </a>
-                    </li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link active" href={% url 'store' %}>{{ user.username }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'logout' %}">Выйти</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link active" href="{% url 'login' %}">Вход</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link active" href="{% url 'registration' %}">Регистрация</a>
+                        </li>
+                    {% endif %}
                     <li class="nav-item dropdown">
                         <a class="nav-link active" aria-current="page" href={% url 'pool' %}>
                             Обратная связь
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link active" aria-current="page" href={% url 'resurs' %}>
+                            Полезные ресурсы
                         </a>
                     </li>
                 </ul>

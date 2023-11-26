@@ -1,5 +1,7 @@
 from django.urls import path
-from . import views
+from . import views, forms
+from datetime import datetime
+from django.contrib.auth.views import LoginView, LogoutView
 
 urlpatterns = [
     path('', views.store, name="store"),
@@ -7,6 +9,19 @@ urlpatterns = [
     path('news/', views.news, name="news"),
     path('catalog/', views.catalog, name="catalog"),
     path('contact/', views.contact, name="contact"),
-    path('login/', views.login, name="login"),
     path('pool/', views.pool, name="pool"),
+    path('resurs/', views.resurs, name="resurs"),
+    path('registration/', views.registration, name="registration"),
+    path('login/',
+         LoginView.as_view(
+             template_name='store/login.html',
+             authentication_form=forms.BootstrapAuthenticationForm,
+             extra_context={
+                 'title': 'Авторизация',
+                 'year': datetime.now().year,
+             },
+             success_url='store/',
+         ),
+         name='login'),
+    path('logout/', LogoutView.as_view(next_page='/'), name="logout"),
 ]
