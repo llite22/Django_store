@@ -62,6 +62,23 @@
                             Полезные ресурсы
                         </a>
                     </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link active" aria-current="page" href={% url 'blog' %}>
+                            Блог
+                        </a>
+                    </li>
+                    {% if user.is_superuser %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link active" aria-current="page" href={% url 'newpost' %}>
+                                Добавить статью
+                            </a>
+                        </li>
+                    {% endif %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link active" aria-current="page" href={% url 'videopost' %}>
+                            Видео
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>

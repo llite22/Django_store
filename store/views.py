@@ -3,7 +3,12 @@ from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 from django.http import HttpRequest
 from datetime import datetime
-from django.contrib.auth import authenticate, login
+from .forms import BlogForm
+from .models import Blog
+from .models import Comment
+from .forms import CommentForm
+
+
 def store(request):
     context = {}
     return render(request, 'store/store.html', context)
@@ -28,9 +33,15 @@ def contact(request):
     context = {}
     return render(request, 'store/contact.html', context)
 
+
 def resurs(request):
     context = {}
     return render(request, 'store/resurs.html', context)
+
+
+def videopost(request):
+    context = {}
+    return render(request, 'store/videopost.html', context)
 
 
 def pool(request):
@@ -64,3 +75,68 @@ def registration(request):
         'store/registration.html', {'regform': regform, 'year': datetime.now().year, }
     )
 
+
+def blog(request):
+    posts = Blog.objects.all()
+
+    assert isinstance(request, HttpRequest)
+    return render(
+        request,
+        'store/blog.html',
+        {
+            'title': 'Блог',
+            'posts': posts,
+            'year': datetime.now().year,
+        }
+    )
+
+
+def blogpost(request, parametr):
+    assert isinstance(request, HttpRequest)
+    post_1 = Blog.objects.get(id=parametr)
+    comments = Comment.objects.filter(post=parametr)
+    form = CommentForm()
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment_f = form.save(commit=False)
+            comment_f.author = request.user
+            comment_f.date = datetime.now()
+            comment_f.post = Blog.objects.get(id=parametr)
+            comment_f.save()
+
+            return redirect("blogpost", parametr=post_1.id)
+
+    return render(
+        request,
+        'store/blogpost.html',
+        {
+            'post_1': post_1,
+            'comments': comments,
+            'form': form,
+            'year': datetime.now().year,
+        }
+    )
+
+
+def newpost(request):
+    assert isinstance(request, HttpRequest)
+    if request.method == "POST":
+        blogform = BlogForm(request.POST, request.FILES)
+        if blogform.is_valid():
+            blog_f = blogform.save(commit=False)
+            blog_f.posted = datetime.now()
+            blog_f.author = request.user
+            blog_f.save()
+            return redirect("blog")
+    else:
+        blogform = BlogForm()
+    return render(
+        request,
+        'store/newpost.html',
+        {
+            'blogform': blogform,
+            'title': "Добавить статью блога",
+            'year': datetime.now().year,
+        }
+    )

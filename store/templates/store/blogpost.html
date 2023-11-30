@@ -1,0 +1,38 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+    <div>
+        <div class="">
+            <h2>{{ post_1.title }}</h2>
+            {% if post_1.image and post_1.image.url != "/media/temp.jpg" %}
+                <img src="{{ post_1.image.url }}" alt="img" width="200">
+            {% endif %}
+        </div>
+        <p>{{ post_1.content|linebreaksbr }}</p>
+        {% if user.is_authenticated %}
+            <h3>Добавить комментарий</h3>
+            <form method="post">
+                {% csrf_token %}
+                <div>
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-warning text-white">Отправить комментарий</button>
+                    <p><a href="{% url 'blog' %}">НАЗАД</a></p>
+                </div>
+            </form>
+        {% else %}
+            <h3>Для добавления своего комментария, пожалуйста, авторизуйтесь</h3>
+            <p>
+                <a href="{% url 'login' %}">Войдите</a>
+                или <a href="{% url 'registration' %}">зарегистрируйтесь</a>
+                чтобы оставить комментарий.
+            </p>
+        {% endif %}
+        <br/>
+        {% for comment in comments %}
+            <hr/>
+            <h5>{{ comment.date }}</h5>
+            <h5>{{ comment.author }}</h5>
+            <p>{{ comment.text|linebreaksbr }}</p>
+        {% endfor %}
+    </div>
+{% endblock %}
